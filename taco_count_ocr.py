@@ -15,32 +15,22 @@ i = 0
 for cnt in contours:
     approx = cv2.approxPolyDP(cnt,0.01*cv2.arcLength(cnt,True),True)
 
-    # print "length approximation: ", len(approx)
-
     if len(approx)==4:
-        if i < 10:
-            x,y,w,h = cv2.boundingRect(cnt)
-            ROI=img[y:y+h, x:x+w]
-            cv2.imwrite("cropped" + i +".jpg", ROI)
+        x,y,w,h = cv2.boundingRect(cnt)
+        if w > 80 and h > 40:
+            if i < 10:
+                ROI=img[y:y+h, x:x+w]
+                cv2.imwrite("cropped" + str(i) +".jpg", ROI)
 
-        print "square"
-        print "countours: ", [cnt]
-        cv2.drawContours(img,[cnt],0,255,-1)
-        i = i+1
-    # elif len(approx)==3:
-    #     print "triangle"
-    #     cv2.drawContours(img,[cnt],0,(0,255,0),-1)
-    # elif len(approx)==4:
-    #     print "square"
-    #     cv2.drawContours(img,[cnt],0,(0,0,255),-1)
-    # elif len(approx) == 9:
-    #     print "half-circle"
-    #     cv2.drawContours(img,[cnt],0,(255,255,0),-1)
-    # elif len(approx) > 15:
-    #     print "circle"
-    #     cv2.drawContours(img,[cnt],0,(0,255,255),-1)
+            print "square"
+            print "countours: ", [cnt]
+            cv2.drawContours(img,[cnt],0,255,-1)
+            i = i+1
 
 cv2.imwrite('testing.png', img)
+
+cv2.namedWindow('img', cv2.WINDOW_NORMAL)
+cv2.resizeWindow('img', 800, 1600)
 cv2.imshow('img',img)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
