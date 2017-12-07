@@ -8,12 +8,25 @@ ret,thresh = cv2.threshold(gray,127,255,1)
 
 _,contours,h = cv2.findContours(thresh,1,2)
 
+
+# print "countours: ", contours
+
+i = 0
 for cnt in contours:
     approx = cv2.approxPolyDP(cnt,0.01*cv2.arcLength(cnt,True),True)
-    print len(approx)
+
+    # print "length approximation: ", len(approx)
+
     if len(approx)==4:
+        if i < 10:
+            x,y,w,h = cv2.boundingRect(cnt)
+            ROI=img[y:y+h, x:x+w]
+            cv2.imwrite("cropped" + i +".jpg", ROI)
+
         print "square"
+        print "countours: ", [cnt]
         cv2.drawContours(img,[cnt],0,255,-1)
+        i = i+1
     # elif len(approx)==3:
     #     print "triangle"
     #     cv2.drawContours(img,[cnt],0,(0,255,0),-1)
